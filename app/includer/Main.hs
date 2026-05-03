@@ -1,6 +1,7 @@
-module Main (main) where
+module Main where
 
 -- includes.hs
+import Data.Char
 import Text.Pandoc.JSON
 import Text.Pandoc
 import Text.Pandoc.Error
@@ -16,13 +17,19 @@ stripPandoc p =
     Left _ -> []
     Right (Pandoc _ blocks) -> blocks
 
+flattenCodeBlocks :: Block -> [Block]
+flattenCodeBlocks (CodeBlock _ text) = [Para [Str text]]
+flattenCodeBlocks b = [b]
+
 doInclude :: Block -> IO [Block]
 doInclude cb@(CodeBlock (id, classes, namevals) contents) =
   case lookup (T.pack "include") namevals of
        Just f     -> do
           c <- TIO.readFile (T.unpack f)
           p <- runIO $ readMarkdown def c
-          return $! stripPandoc p
+          let blocks = stripPandoc p
+          let flattened = concatMap flattenCodeBlocks blocks
+          return flattened
        Nothing    -> return [cb]
 doInclude x = return [x]
 

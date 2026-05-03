@@ -44,7 +44,7 @@ library:
 executables:
   include-filter-exe:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:         app/includer
     ghc-options:
     - -threaded
     - -rtsopts
@@ -52,6 +52,15 @@ executables:
     dependencies:
     - include-filter
 
+  sms-links:
+    main:                Main.hs
+    source-dirs:         app/linker
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - include-filter
 tests:
   include-filter-test:
     main:                Spec.hs
