@@ -1,10 +1,10 @@
 name:                include-filter
 version:             0.1.0.0
-github:              "githubuser/include-filter"
+github:              "aelfric/haskell-include-filter"
 license:             BSD3
 author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2023 Author name here"
+maintainer:          "F.Riccobono@gmail.com"
+copyright:           "2026 Frank Riccobono"
 
 extra-source-files:
 - README.md
@@ -17,7 +17,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/include-filter#readme>
+description:         Please see the README on GitHub at <https://github.com/aelfric/haskell-include-filter#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -39,7 +39,8 @@ ghc-options:
 - -Wredundant-constraints
 
 library:
-  source-dirs: src
+  source-dirs: app/includer
+  exposed-modules: IncludeFilter
 
 executables:
   include-filter-exe:
@@ -70,4 +71,6 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
+    - hspec
+    - temporary
     - include-filter

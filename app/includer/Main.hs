@@ -1,37 +1,7 @@
 module Main where
 
--- includes.hs
-import Data.Char
 import Text.Pandoc.JSON
-import Text.Pandoc
-import Text.Pandoc.Error
-import qualified Data.Text.IO as TIO
-import qualified Data.Text as T
-import Control.Monad
-
-import Prelude hiding (readFile, getLine, writeFile)
-
-stripPandoc :: Either PandocError Pandoc -> [Block]
-stripPandoc p =
-  case p of
-    Left _ -> []
-    Right (Pandoc _ blocks) -> blocks
-
-flattenCodeBlocks :: Block -> [Block]
-flattenCodeBlocks (CodeBlock _ text) = [Para [Str text]]
-flattenCodeBlocks b = [b]
-
-doInclude :: Block -> IO [Block]
-doInclude cb@(CodeBlock (id, classes, namevals) contents) =
-  case lookup (T.pack "include") namevals of
-       Just f     -> do
-          c <- TIO.readFile (T.unpack f)
-          p <- runIO $ readMarkdown def c
-          let blocks = stripPandoc p
-          let flattened = concatMap flattenCodeBlocks blocks
-          return flattened
-       Nothing    -> return [cb]
-doInclude x = return [x]
+import IncludeFilter (doInclude)
 
 main :: IO ()
 main = toJSONFilter doInclude
